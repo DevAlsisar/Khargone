@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Change a map's style</title>
+<meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
+<link href="https://api.mapbox.com/mapbox-gl-js/v2.13.0/mapbox-gl.css" rel="stylesheet">
+<link rel="stylesheet" href="Khargone.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+<script src="https://api.mapbox.com/mapbox-gl-js/v2.13.0/mapbox-gl.js"></script>
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js">  </script>
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+<script src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-compare/v0.4.0/mapbox-gl-compare.js"></script>
+<link rel="stylesheet" href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-compare/v0.4.0/mapbox-gl-compare.css" type="text/css">
+<style>
+body { margin: 0; padding: 0; }
+#map { position: absolute; top: 0; bottom: 0; width: 100%; }
+</style>
+</head>
+<body>
+<style>
+    #menu {
+        position: absolute;
+        background: #efefef;
+        padding: 10px;
+        font-family: 'Open Sans', sans-serif;
+    }
+.map-overlay {
+font: bold 12px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
+position: absolute;
+width: 25%;
+top: 0;
+right: 0;
+padding: 10px;
+}
+ 
+.map-overlay .map-overlay-inner {
+background-color: #fff;
+box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+border-radius: 3px;
+padding: 10px;
+margin-bottom: 10px;
+}
+ 
+.map-overlay label {
+display: block;
+margin: 0 0 10px;
+}
+ 
+.map-overlay input {
+background-color: transparent;
+display: inline-block;
+width: 100%;
+position: relative;
+margin: 0;
+cursor: ew-resize;
+}
+#legend
+{   background-color: white;
+    position: absolute;
+    bottom: 0;
+    top:0;
+    margin:auto 0;
+    right: 0;
+    height:100px;
+    
+}
+.legend label,
+.legend span {
+  display:block;
+  float:left;
+  height:15px;
+  width:20%;
+  text-align:center;
+  font-size:9px;
+  color:#808080;
+  }
+</style>
+<div id="comparison-container">
+    <div id="before" class="map"></div>
+    <div id="after" class="map"></div>
+    </div>
+    
+
+<div id="map"></div>
+
+<div id="menu">
+    <!-- <input id="satellite-streets-v12" type="radio" name="rtoggle" value="satellite" checked="checked"> -->
+    <!-- See a list of Mapbox-hosted public styles at -->
+    <!-- https://docs.mapbox.com/api/maps/styles/#mapbox-styles -->
+    <!-- <label for="satellite-streets-v12">satellite streets</label>
+    <input id="light-v11" type="radio" name="rtoggle" value="light">
+    <label for="light-v11">light</label>
+    <input id="dark-v11" type="radio" name="rtoggle" value="dark">
+    <label for="dark-v11">dark</label>
+    <input id="streets-v12" type="radio" name="rtoggle" value="streets">
+    <label for="streets-v12">streets</label>
+    <input id="outdoors-v12" type="radio" name="rtoggle" value="outdoors">
+    <label for="outdoors-v12">outdoors</label> -->
+    <label for="cars">Choose a map:</label>
+
+    <select name="cars" id="cars">
+      <option value="mapbox://styles/dev0510/cle5dg0ad005x01mt2d8phfe3">Haldwani 2022</option>
+      <option value="mapbox://styles/dev0510/cle5cyqqj001401q921cucm3o">haldwani 2018</option>
+      <option value="mapbox://styles/dev0510/cle5cyqqj001401q921cucm3o">e2</option>
+      <option value="mapbox://styles/dev0510/cle5dg0ad005x01mt2d8phfe3">e3</option>
+    </select>
+</div>
+<div id='legend' >
+  <strong>Grid Code wise colors </strong>
+  <nav class='legend clearfix'>
+    <span style='background:#2dc322;'></span>
+    <span style='background:#b88f0a;'></span>
+    <span style='background:#26148a;'></span>
+    <span style='background:#b90e0e;'></span>
+    <br>
+    <label>Chilli</label>
+   <label>Cotton</label>
+   <label>Soybean</label>
+   <label>Banana</label>
+</div>
+<div class="map-overlay top">
+<div class="map-overlay-inner">
+<label>Layer opacity: <span id="slider-value">50%</span></label>
+<input id="slider" type="range" min="0" max="100" step="0" value="50">
+</div>
+</div>
+<script>
+	mapboxgl.accessToken = 'pk.eyJ1IjoiZGV2MDUxMCIsImEiOiJjbGNoaG41czEwYmxuM3FtOWNvemVub3lkIn0.5hN1wrZNfw-7YmnNYKM2YQ';
+    const map = new mapboxgl.Map({
+        container: 'map', 
+        style: 'mapbox://styles/dev0510/cle5cyqqj001401q921cucm3o', 
+        center: [79.2925, 29.2811], 
+        zoom: 13 
+    });
+    const slider = document.getElementById('slider');
+const sliderValue = document.getElementById('slider-value');
+    map.on('load',function(){
+        map.addSource('mapbox-dem', {
+'type': 'raster-dem',
+'url': 'mapbox://mapbox.mapbox-terrain-dem-v1',
+'tileSize': 512,
+'maxzoom': 14
+});
+    // const legend_colors = map.getStyle().layers
+    // var y;
+    //  for(var i =0;i<136;i++)
+    //  {
+    //          if (legend_colors[i].id=='haldwani')
+    //          {
+    //                 y = legend_colors[i];
+    //          }
+    //  }
+    //      var legend_colors_array;
+    //      var t;
+    //      t=y.paint['fill-color']
+    //      for(var i=0;i<19;i++)
+    //      {
+    //         if(i%2==0)
+    //         {
+    //             legend_colors_array.push(t[i])
+    //         }
+
+    //      }
+    //      console.log(legend_colors_array)
+        
+map.setTerrain({ 'source': 'mapbox-dem', 'exaggeration': 1.5 });
+        //for opacity control
+        slider.addEventListener('input', (e) => {
+
+        map.setPaintProperty(
+'haldwani',
+'fill-opacity',
+parseInt(e.target.value, 10) / 100
+);
+sliderValue.textContent = e.target.value + '%';
+       
+
+    })
+}); // this for map functions 
+
+
+function z(){
+    map.setStyle("mapbox://styles/dev0510/cle5dg0ad005x01mt2d8phfe3")
+}
+
+
+</script>
+
+</body>
+</html>
